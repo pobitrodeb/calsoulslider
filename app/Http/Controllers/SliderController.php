@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class SliderController extends Controller
@@ -13,7 +13,8 @@ class SliderController extends Controller
      */
     public function index()
     {
-        //
+        $sliders = Slider::all();
+        return view('slider.index', compact('sliders'));
     }
 
     /**
@@ -23,7 +24,7 @@ class SliderController extends Controller
      */
     public function create()
     {
-        //
+        return view('slider.create');
     }
 
     /**
@@ -34,7 +35,19 @@ class SliderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'image' => 'required|mimes:jpeg,png,bmp,gif|max: 2000'
+            ]);
+            $uploadImage = $request->file('image');
+            $imageNameWithExt = $uploadImage->getClientOriginalName();
+            $imageName =pathinfo($imageNameWithExt, PATHINFO_FILENAME);
+            $imageExt=$uploadImage->getClientOriginalExtension();
+            $storeImage=$imageName . time() . "." . $imageExt;
+            $request->image->move(public_path('images'), $storeImage);
+            $carousel= slider::create([
+                'image' => $storeImage
+            ]);
+            return redirect('slider');
     }
 
     /**
