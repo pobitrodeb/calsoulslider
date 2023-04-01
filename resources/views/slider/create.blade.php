@@ -15,6 +15,11 @@
                     <div class="m-5">
                         <h3 class="float-start mb-5">Uplode Image For Carousel Slide</h3>
                         <input type="file" class="form-control form-control-lg" name="image" id="image">
+                        @error('image')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+
+
                     </div>
                     <div class="m-5">
                         <button class="btn btn-primary">Uplode Image</button>
